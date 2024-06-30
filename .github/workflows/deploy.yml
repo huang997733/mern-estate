@@ -50,6 +50,11 @@ jobs:
         run: |
           cp -r client/dist/* api/public/
 
+      - name: Set up Git user
+        run: |
+          git config --global user.email "williamhzy99@gmail.com"
+          git config --global user.name "huang997733"
+
       - name: Deploy to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}

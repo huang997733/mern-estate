@@ -1,0 +1,45 @@
+name: Deploy Fullstack App to Heroku
+
+on:
+  push:
+    branches:
+      - main # or the branch you want to deploy from
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14" # specify your node version
+
+      - name: Install dependencies for backend
+        run: |
+          npm install
+
+      - name: Install dependencies for frontend
+        run: |
+          cd client
+          npm install
+
+      - name: Build frontend
+        run: |
+          cd client
+          npm run build  # assuming you have a build script in your package.json
+
+      - name: Move frontend build to backend
+        run: |
+          cp -r client/build/* api/public/
+
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY_BACKEND }}
+        run: |
+          cd api
+          heroku git:remote -a ${{ secrets.HEROKU_APP_NAME_BACKEND }}
+          git push heroku main:refs/heads/main

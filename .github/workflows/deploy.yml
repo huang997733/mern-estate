@@ -32,6 +32,17 @@ jobs:
           cd client
           npm run build  # assuming you have a build script in your package.json
 
+      - name: Debug frontend build output
+        run: |
+          echo "Listing contents of client directory:"
+          ls client
+          echo "Listing contents of client/dist directory:"
+          ls client/dist
+
+      - name: Check frontend build output
+        run: |
+          if [ ! -d "client/dist" ]; then echo "Frontend build failed. No 'client/dist' directory found."; exit 1; fi
+
       - name: Move frontend build to backend
         run: |
           cp -r client/dist/* api/public/
@@ -42,4 +53,6 @@ jobs:
         run: |
           cd api
           heroku git:remote -a ${{ secrets.HEROKU_APP_NAME_BACKEND }}
-          git push heroku main:refs/heads/main
+          git add .
+          git commit -m "Deploy to Heroku"
+          git push heroku main

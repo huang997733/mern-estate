@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "20" # specify your node version
+          node-version: "20" # or specify the Node.js version your project requires
 
       - name: Install dependencies for backend
         run: |
@@ -30,7 +30,7 @@ jobs:
       - name: Build frontend
         run: |
           cd client
-          npm run build  # assuming you have a build script in your package.json
+          npm run build
 
       - name: Debug frontend build output
         run: |
@@ -42,6 +42,9 @@ jobs:
       - name: Check frontend build output
         run: |
           if [ ! -d "client/dist" ]; then echo "Frontend build failed. No 'client/dist' directory found."; exit 1; fi
+
+      - name: Ensure 'api/public' directory exists
+        run: mkdir -p api/public/
 
       - name: Move frontend build to backend
         run: |

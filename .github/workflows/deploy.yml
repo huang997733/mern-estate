@@ -34,7 +34,7 @@ jobs:
 
       - name: Move frontend build to backend
         run: |
-          cp -r client/build/* api/public/
+          cp -r client/dist/* api/public/
 
       - name: Deploy to Heroku
         env:
